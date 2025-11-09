@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Repository Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Interface</h1>
+        <nav>
+            <a href="index.html">Dashboard</a>
+            <a href="admin.html" class="active">Admin</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="admin-section">
+            <h2>Manage Repositories</h2>
+            <div class="add-repo-form">
+                <h3>Add Repository</h3>
+                <form id="add-repo-form">
+                    <div class="form-group">
+                        <label for="repo-url">GitHub Repository URL:</label>
+                        <input 
+                            type="text" 
+                            id="repo-url" 
+                            name="repo-url" 
+                            placeholder="https://github.com/username/repository"
+                            required
+                        >
+                        <small>Example: https://github.com/SOELexicon/clickup_framework</small>
+                    </div>
+                    <button type="submit">Add Repository</button>
+                </form>
+                <div id="add-repo-message" class="message"></div>
+            </div>
+
+            <div class="repo-list">
+                <h3>Configured Repositories</h3>
+                <div id="repo-list-container">
+                    <p class="loading">Loading...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="github-api.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
