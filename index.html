@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOELexicon - GitHub Repository Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>GitHub Repository Dashboard</h1>
+        <nav>
+            <a href="index.html">Dashboard</a>
+            <a href="admin.html">Admin</a>
+        </nav>
+    </header>
+
+    <main>
+        <div id="loading" class="loading">Loading repositories...</div>
+        <div id="no-repos" class="no-repos" style="display: none;">
+            <p>No repositories configured yet.</p>
+            <p><a href="admin.html">Go to Admin</a> to add repositories.</p>
+        </div>
+        <div id="repositories" class="repositories-container"></div>
+    </main>
+
+    <script src="github-api.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+/* Header Styles */
+header {
+    background-color: #24292e;
+    color: white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+}
+
+nav {
+    display: flex;
+    gap: 1rem;
+}
+
+nav a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+nav a:hover,
+nav a.active {
+    background-color: #444d56;
+    color: white;
+}
+
+/* Main Content */
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Loading and Messages */
+.loading,
+.no-repos {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.message {
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    display: none;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    display: block;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    display: block;
+}
+
+/* Repository Cards */
+.repositories-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.repo-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s;
+}
+
+.repo-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.repo-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #0366d6;
+}
+
+.repo-card h2 a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+.repo-card h2 a:hover {
+    text-decoration: underline;
+}
+
+.repo-meta {
+    display: flex;
+    gap: 1rem;
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+    color: #586069;
+}
+
+.repo-description {
+    margin: 1rem 0;
+    color: #586069;
+}
+
+/* Workflows */
+.workflows {
+    margin-top: 1.5rem;
+}
+
+.workflows h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    color: #24292e;
+}
+
+.workflow-item {
+    background: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.workflow-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.workflow-runs {
+    margin-top: 0.5rem;
+}
+
+.workflow-run {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    background: white;
+    border-radius: 4px;
+    font-size: 0.875rem;
+}
+
+.workflow-run a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+.workflow-run a:hover {
+    text-decoration: underline;
+}
+
+.status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status.success {
+    background-color: #28a745;
+    color: white;
+}
+
+.status.failure {
+    background-color: #d73a49;
+    color: white;
+}
+
+.status.in_progress {
+    background-color: #dbab09;
+    color: white;
+}
+
+.status.queued {
+    background-color: #6f42c1;
+    color: white;
+}
+
+.status.cancelled {
+    background-color: #6a737d;
+    color: white;
+}
+
+/* Admin Styles */
+.admin-section {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.admin-section h2 {
+    margin-bottom: 1.5rem;
+    color: #24292e;
+}
+
+.add-repo-form {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.add-repo-form h3 {
+    margin-bottom: 1rem;
+    color: #24292e;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #24292e;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #0366d6;
+    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 0.25rem;
+    color: #586069;
+    font-size: 0.875rem;
+}
+
+button {
+    background-color: #28a745;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+.repo-list h3 {
+    margin-bottom: 1rem;
+    color: #24292e;
+}
+
+.repo-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    background: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+}
+
+.repo-list-item-info h4 {
+    margin-bottom: 0.25rem;
+    color: #0366d6;
+}
+
+.repo-list-item-info p {
+    font-size: 0.875rem;
+    color: #586069;
+}
+
+.remove-btn {
+    background-color: #d73a49;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.remove-btn:hover {
+    background-color: #cb2431;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .repositories-container {
+        grid-template-columns: 1fr;
+    }
+    
+    header {
+        padding: 1rem;
+    }
+    
+    main {
+        margin: 1rem auto;
+    }
+    
+    .admin-section {
+        padding: 1rem;
+    }
+}
