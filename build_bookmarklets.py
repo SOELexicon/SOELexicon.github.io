@@ -7,13 +7,65 @@ This allows bookmarklets to work even in file:// protocol (no CORS issues)
 
 import json
 import os
+import re
 from pathlib import Path
 
+def minify_bookmarklet_code(code):
+    """
+    Minify bookmarklet code by removing comments and putting on a single line.
+    Bookmarklets cannot contain comments and should be on a single line.
+    """
+    if not code:
+        return code
+    
+    # Remove single-line comments (// ...) but preserve URLs like http:// or https://
+    # Match // that's not preceded by : (to avoid http://) and not part of https://
+    lines = []
+    for line in code.split('\n'):
+        # Check if line contains http:// or https://
+        if '://' in line:
+            # For lines with URLs, only remove comments that come after the URL part
+            # Simple approach: if line has //, check if it's a comment or part of URL
+            if '//' in line:
+                # Find the first // that's not part of http:// or https://
+                url_match = re.search(r'https?://', line)
+                if url_match:
+                    # Split at the URL, process comment removal only after URL
+                    url_end = url_match.end()
+                    before_url = line[:url_end]
+                    after_url = line[url_end:]
+                    # Remove comments from after_url part
+                    after_url = re.sub(r'//.*$', '', after_url)
+                    line = before_url + after_url
+                else:
+                    # No URL, safe to remove comment
+                    line = re.sub(r'//.*$', '', line)
+        else:
+            # No URL, safe to remove comment
+            line = re.sub(r'//.*$', '', line)
+        lines.append(line.strip())
+    
+    # Remove multi-line comments (/* ... */)
+    code = '\n'.join(lines)
+    code = re.sub(r'/\*.*?\*/', '', code, flags=re.DOTALL)
+    
+    # Join all lines into a single line, preserving single spaces
+    # Filter out empty lines first
+    lines = [line for line in code.split('\n') if line.strip()]
+    minified = ' '.join(lines)
+    
+    # Clean up multiple spaces (but be careful - this is safe for bookmarklets)
+    minified = re.sub(r' +', ' ', minified)
+    
+    return minified.strip()
+
 def read_bookmarklet_file(filepath):
-    """Read a bookmarklet file and return its content."""
+    """Read a bookmarklet file, minify it, and return its content."""
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
-            return f.read().strip()
+            code = f.read().strip()
+            # Minify the code (remove comments, compress whitespace)
+            return minify_bookmarklet_code(code)
     except Exception as e:
         print(f"Error reading {filepath}: {e}")
         return None
@@ -91,20 +143,14 @@ def update_javascript_file():
         print(f"Error reading {json_file}: {e}")
         return False
     
-    # Generate JavaScript array with embedded code
-    js_array_items = []
-    for b in bookmarklets:
-        item = {
-            "name": b.get('name', ''),
-            "description": b.get('description', ''),
-            "file": b.get('file', ''),
-            "icon": b.get('icon', '🔖')
-        }
-        if 'code' in b:
-            item['code'] = b['code']
-        js_array_items.append(json.dumps(item, ensure_ascii=False, indent=8))
+    # Generate JavaScript array - use json.dumps on the entire array
+    # This properly escapes all special characters including quotes, newlines, etc.
+    # Use indent=2 for readability, but we'll format it properly for JavaScript
+    js_array_string = json.dumps(bookmarklets, ensure_ascii=False, indent=2)
     
-    js_array = '[\n' + ',\n'.join(js_array_items) + '\n]'
+    # The JSON string is valid, but we need to ensure it's properly formatted
+    # when inserted into JavaScript. The indent=2 creates readable JSON which
+    # is also valid JavaScript (JSON is a subset of JavaScript).
     
     # Read the current bookmarklets.js
     try:
@@ -116,10 +162,11 @@ def update_javascript_file():
     
     # Replace the EMBEDDED_BOOKMARKLETS constant
     import re
-    pattern = r'const EMBEDDED_BOOKMARKLETS = \[.*?\];'
-    replacement = f'const EMBEDDED_BOOKMARKLETS = {js_array};'
+    # Match the entire constant declaration including the array
+    pattern = r'const EMBEDDED_BOOKMARKLETS = \[[\s\S]*?\];'
+    replacement = f'const EMBEDDED_BOOKMARKLETS = {js_array_string};'
     
-    new_js_content = re.sub(pattern, replacement, js_content, flags=re.DOTALL)
+    new_js_content = re.sub(pattern, replacement, js_content)
     
     if new_js_content == js_content:
         print("Warning: Could not find EMBEDDED_BOOKMARKLETS in bookmarklets.js")
