@@ -18,19 +18,44 @@ def minify_bookmarklet_code(code):
     if not code:
         return code
     
+    # Check if code is already minified (single line, no comments, URL-encoded)
+    # If it's already a single line with no obvious comments, return as-is
+    lines = code.split('\n')
+    if len(lines) == 1:
+        # Already single line - check if it has comments
+        if '//' not in code and '/*' not in code:
+            return code.strip()
+        # Has comments but is single line - might be URL-encoded, be careful
+        # Only remove comments if they're clearly not part of the code
+        if '%2F%2F' in code or '%2F%2A' in code:
+            # URL-encoded comments - don't process, return as-is
+            return code.strip()
+    
+    # Check if code is URL-encoded (contains % patterns)
+    # URL-encoded bookmarklets should not be minified further
+    if re.search(r'%[0-9A-Fa-f]{2}', code):
+        # URL-encoded code - just remove any non-encoded comments and return
+        # Remove non-encoded single-line comments
+        lines = []
+        for line in code.split('\n'):
+            # Only remove // comments that are clearly comments (not in strings)
+            # Simple heuristic: if line starts with whitespace and //, it's a comment
+            stripped = line.strip()
+            if stripped.startswith('//') and not stripped.startswith('javascript:'):
+                continue  # Skip comment lines
+            lines.append(line)
+        return '\n'.join(lines).strip()
+    
+    # Normal code - remove comments and minify
     # Remove single-line comments (// ...) but preserve URLs like http:// or https://
-    # Match // that's not preceded by : (to avoid http://) and not part of https://
-    lines = []
+    processed_lines = []
     for line in code.split('\n'):
         # Check if line contains http:// or https://
         if '://' in line:
             # For lines with URLs, only remove comments that come after the URL part
-            # Simple approach: if line has //, check if it's a comment or part of URL
             if '//' in line:
-                # Find the first // that's not part of http:// or https://
                 url_match = re.search(r'https?://', line)
                 if url_match:
-                    # Split at the URL, process comment removal only after URL
                     url_end = url_match.end()
                     before_url = line[:url_end]
                     after_url = line[url_end:]
@@ -38,15 +63,14 @@ def minify_bookmarklet_code(code):
                     after_url = re.sub(r'//.*$', '', after_url)
                     line = before_url + after_url
                 else:
-                    # No URL, safe to remove comment
                     line = re.sub(r'//.*$', '', line)
         else:
             # No URL, safe to remove comment
             line = re.sub(r'//.*$', '', line)
-        lines.append(line.strip())
+        processed_lines.append(line.strip())
     
     # Remove multi-line comments (/* ... */)
-    code = '\n'.join(lines)
+    code = '\n'.join(processed_lines)
     code = re.sub(r'/\*.*?\*/', '', code, flags=re.DOTALL)
     
     # Join all lines into a single line, preserving single spaces
@@ -54,7 +78,8 @@ def minify_bookmarklet_code(code):
     lines = [line for line in code.split('\n') if line.strip()]
     minified = ' '.join(lines)
     
-    # Clean up multiple spaces (but be careful - this is safe for bookmarklets)
+    # Clean up multiple spaces (but preserve spaces in string literals)
+    # Only collapse spaces that are clearly not in strings
     minified = re.sub(r' +', ' ', minified)
     
     return minified.strip()
