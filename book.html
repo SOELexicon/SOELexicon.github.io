@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOELexicon - Bookmarklets</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .bookmarklets-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .page-header {
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            margin-bottom: 10px;
+        }
+        
+        .instructions {
+            background: #f0f0f0;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        
+        .instructions h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+        
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin: 8px 0;
+        }
+        
+        #bookmarklets-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .bookmarklet-item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .bookmarklet-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .bookmarklet-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .bookmarklet-icon {
+            font-size: 1.5em;
+        }
+        
+        .bookmarklet-name {
+            margin: 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+        
+        .bookmarklet-description {
+            color: #666;
+            margin: 10px 0;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .bookmarklet-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .bookmarklet-link {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9em;
+            cursor: grab;
+            transition: background 0.2s;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .bookmarklet-link:hover {
+            background: #0056b3;
+        }
+        
+        .bookmarklet-link:active {
+            cursor: grabbing;
+        }
+        
+        .copy-code-btn {
+            padding: 10px 15px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+        
+        .copy-code-btn:hover {
+            background: #5a6268;
+        }
+        
+        .no-bookmarklets, .error {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .error {
+            color: #dc3545;
+        }
+        
+        .loading-bookmarklets {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            #bookmarklets-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .bookmarklet-actions {
+                flex-direction: column;
+            }
+            
+            .bookmarklet-link,
+            .copy-code-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SOELexicon Bookmarklets</h1>
+        <nav>
+            <a href="index.html">Dashboard</a>
+            <a href="admin.html">Admin</a>
+            <a href="book.html">Bookmarklets</a>
+        </nav>
+    </header>
+
+    <main class="bookmarklets-page">
+        <div class="page-header">
+            <h1>🔖 Bookmarklets</h1>
+            <p>Drag bookmarklets to your bookmarks bar for quick access</p>
+        </div>
+        
+        <div class="instructions">
+            <h2>How to Use:</h2>
+            <ol>
+                <li><strong>Drag & Drop:</strong> Drag any bookmarklet link below to your browser's bookmarks bar</li>
+                <li><strong>Or Click:</strong> Click a bookmarklet link to test it immediately</li>
+                <li><strong>Copy Code:</strong> Use the "Copy Code" button to get the raw JavaScript code</li>
+            </ol>
+            <p><strong>Tip:</strong> If your bookmarks bar is hidden, press <kbd>Ctrl+Shift+B</kbd> (Windows/Linux) or <kbd>Cmd+Shift+B</kbd> (Mac) to show it.</p>
+        </div>
+        
+        <div id="loading-bookmarklets" class="loading-bookmarklets">Loading bookmarklets...</div>
+        <div id="bookmarklets-container"></div>
+    </main>
+
+    <script src="bookmarklets.js"></script>
+    <script>
+        // Hide loading message when bookmarklets are loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingDiv = document.getElementById('loading-bookmarklets');
+            if (loadingDiv) {
+                setTimeout(() => {
+                    loadingDiv.style.display = 'none';
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>

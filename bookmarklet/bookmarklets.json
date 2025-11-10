@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Example Bookmarklet",
+    "description": "A sample bookmarklet to demonstrate the system",
+    "file": "example.js",
+    "icon": "🔖"
+  },
+  {
+    "name": "HTML Analyser",
+    "description": "Analyzes HTML structure and displays element information, attributes, and hierarchy",
+    "file": "HTMLAnalyser.js",
+    "icon": "🔍"
+  },
+  {
+    "name": "Extract JSONs",
+    "description": "Scans the page for JSON objects and arrays, extracts them, and allows copying or downloading",
+    "file": "ExtractJsons.js",
+    "icon": "📋"
+  }
+]
+
